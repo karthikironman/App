@@ -30,7 +30,6 @@ def get_delay():
     print(pred)
     dic = {'CG':'Computer Generated Review','OR':'Original Review'}
     return f'<html><body><h1>{dic[pred[0]]}</h1> <form action="/"> <button type="submit">back </button> </form></body></html>'
-    return f'<html>TEST</html>'
 
 
 if __name__ == '__main__':
