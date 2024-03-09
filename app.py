@@ -29,7 +29,7 @@ def get_delay():
     pred = pipeline.predict([query_review])
     print(pred)
     dic = {'CG':'Computer Generated Review','OR':'Original Review'}
-    return f'<html><body><h1>{dic[pred[0]]}</h1> <form action="/"> <button type="submit">back </button> </form></body></html>'
+    return f'<html><body><h1>test</h1> <form action="/"> <button type="submit">back </button> </form></body></html>'
 
 
 if __name__ == '__main__':
