@@ -1,5 +1,5 @@
 from flask import Flask, abort, jsonify, request, render_template
-import joblib
+from sklearn.externals import joblib
 # from feature import *
 import json
 
