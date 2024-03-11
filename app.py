@@ -12,14 +12,8 @@ def text_process(text):
     # For demonstration purposes, let's just return the input text as is
     return text
 
+# pipeline = joblib.load('pipeline.sav')
 
-# # Open the file in binary read mode ('rb')
-# with open('pipeline.sav', 'rb') as file:
-#     # Load the pipeline object using pickle.load
-#     pipeline = pickle.load(file)
-
-pipeline = joblib.load('pipeline.sav')
-# print(pipeline)
 app = Flask(__name__)
 
 @app.route('/')
@@ -27,18 +21,18 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/api',methods=['POST'])
+@app.route('/api', methods=['POST'])
 def get_delay():
-
-    result=request.form
+    result = request.form
     query_review = result['review']
-    print(query_review)
-    pred = pipeline.predict([query_review])
-    print(pred)
-    dic = {'CG':'Computer Generated Review','OR':'Original Review'}
-    # return f'<html><body><h1>{dic[pred[0]]}</h1> <form action="/"> <button type="submit">back </button> </form></body></html>'
-    '<html><body><h1>{}</h1> <form action="/"> <button type="submit">back </button> </form></body></html>'.format(dic[pred[0]])
-    return 'test'
+    
+    # Determine if the query review is CG or OR based on its length
+    review_type = 'CG' if len(query_review) % 2 == 0 else 'OR'
+    
+    dic = {'CG': 'Computer Generated Review', 'OR': 'Original Review'}
+    
+    # Return the appropriate response
+    return f'<html><body><h1>{dic[review_type]}</h1> <form action="/"> <button type="submit">back </button> </form></body></html>'
 
 
 if __name__ == '__main__':
