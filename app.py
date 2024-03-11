@@ -18,7 +18,7 @@ def text_process(text):
 #     # Load the pipeline object using pickle.load
 #     pipeline = pickle.load(file)
 
-pipeline = pickle.load('pipeline.sav')
+pipeline = joblib.load('pipeline.sav')
 # print(pipeline)
 app = Flask(__name__)
 
@@ -36,7 +36,8 @@ def get_delay():
     pred = pipeline.predict([query_review])
     print(pred)
     dic = {'CG':'Computer Generated Review','OR':'Original Review'}
-    return f'<html><body><h1>{dic[pred[0]]}</h1> <form action="/"> <button type="submit">back </button> </form></body></html>'
+    # return f'<html><body><h1>{dic[pred[0]]}</h1> <form action="/"> <button type="submit">back </button> </form></body></html>'
+    '<html><body><h1>{}</h1> <form action="/"> <button type="submit">back </button> </form></body></html>'.format(dic[pred[0]])
     return 'test'
 
 
