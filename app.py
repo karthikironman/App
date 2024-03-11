@@ -1,7 +1,8 @@
 from flask import Flask, abort, jsonify, request, render_template
-import joblib
+# import joblib
 # from feature import *
 import json
+import pickle
 
 
 
@@ -11,8 +12,14 @@ def text_process(text):
     # For demonstration purposes, let's just return the input text as is
     return text
 
-pipeline = joblib.load('pipeline.sav')
 
+# Open the file in binary read mode ('rb')
+with open('pipeline.sav', 'rb') as file:
+    # Load the pipeline object using pickle.load
+    pipeline = pickle.load(file)
+
+# pipeline = pickle.load('pipeline.sav')
+# print(pipeline)
 app = Flask(__name__)
 
 @app.route('/')
