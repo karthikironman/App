@@ -1,10 +1,9 @@
 from flask import Flask, abort, jsonify, request, render_template
 import joblib
 # from feature import *
+import pandas as pd
 import json
 #import pickle
-
-
 
 def text_process(text):
     # Implement your text preprocessing logic here
@@ -19,6 +18,23 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
+@app.route('/raw_data')
+def display_data():
+    # Read the CSV file
+    csv_path = 'code/fake_reviews_dataset.csv'
+    df = pd.read_csv(csv_path)
+
+    # Convert DataFrame to HTML table
+    table_html = df.to_html(classes='table')
+
+    return render_template('rawData.html', table_html=table_html)
+
+
+@app.route('/output')
+def output():
+    return render_template('output.html')
 
 
 @app.route('/api', methods=['POST'])

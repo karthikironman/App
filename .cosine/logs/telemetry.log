@@ -1,0 +1,71 @@
+
+INFO [2024-03-11T15:57:42.030Z]: Preparing to initialize extension
+INFO [2024-03-11T15:57:43.044Z]: Registering flag observer
+INFO [2024-03-11T15:57:43.044Z]: Navigating to loading page
+INFO [2024-03-11T15:57:43.044Z]: Navigation
+INFO [2024-03-11T15:57:43.044Z]: {"page":"/loading"}
+INFO [2024-03-11T15:57:43.045Z]: Initializing workspace controller
+INFO [2024-03-11T15:57:43.046Z]: Creating URI handler
+INFO [2024-03-11T15:57:43.046Z]: Getting auth service props
+INFO [2024-03-11T15:57:43.046Z]: Creating auth service
+INFO [2024-03-11T15:57:43.046Z]: Setting network auth service
+INFO [2024-03-11T15:57:43.046Z]: Creating context store
+INFO [2024-03-11T15:57:43.047Z]: Creating engine
+INFO [2024-03-11T15:57:43.047Z]: Creating sql db
+INFO [2024-03-11T15:57:43.102Z]: Creating vector db
+INFO [2024-03-11T15:57:43.103Z]: Creating config manager
+INFO [2024-03-11T15:57:43.104Z]: Get languages
+INFO [2024-03-11T15:57:43.104Z]: Reading ALL files
+INFO [2024-03-11T15:57:43.105Z]: Get Overview
+INFO [2024-03-11T15:57:43.105Z]: Creating code parser
+INFO [2024-03-11T15:57:43.105Z]: Creating code index
+INFO [2024-03-11T15:57:43.106Z]: Creating graphs
+INFO [2024-03-11T15:57:43.106Z]: Creating tagger
+INFO [2024-03-11T15:57:43.106Z]: Creating semantic
+INFO [2024-03-11T15:57:43.106Z]: Creating keyword
+INFO [2024-03-11T15:57:43.106Z]: Creating file search
+INFO [2024-03-11T15:57:43.106Z]: Initializing engine
+INFO [2024-03-11T15:57:43.192Z]: [CodeTagger.init] Initializing
+INFO [2024-03-11T15:57:43.193Z]: Initializing history service
+INFO [2024-03-11T15:57:43.193Z]: Creating project bot props
+INFO [2024-03-11T15:57:43.193Z]: Creating plan service
+INFO [2024-03-11T15:57:43.193Z]: Creating terms service
+INFO [2024-03-11T15:57:43.193Z]: Creating auth controller
+INFO [2024-03-11T15:57:43.193Z]: Initializing auth controller
+INFO [2024-03-11T15:57:43.194Z]: Checking auth
+INFO [2024-03-11T15:57:43.196Z]: Creating plan controller
+INFO [2024-03-11T15:57:43.196Z]: Initializing plan controller
+INFO [2024-03-11T15:57:54.201Z]: Creating status controller
+INFO [2024-03-11T15:57:54.201Z]: Creating chat bot
+INFO [2024-03-11T15:57:54.202Z]: Creating git service
+INFO [2024-03-11T15:57:54.202Z]: Creating user context
+INFO [2024-03-11T15:57:54.202Z]: Creating search controller
+INFO [2024-03-11T15:57:54.202Z]: Initializing search controller
+INFO [2024-03-11T15:57:54.207Z]: Creating index controller
+INFO [2024-03-11T15:57:54.207Z]: Initializing index controller
+INFO [2024-03-11T15:57:54.207Z]: Creating migrate controller
+INFO [2024-03-11T15:57:54.207Z]: Initializing migrate controller
+INFO [2024-03-11T15:57:54.207Z]: Creating settings controller
+INFO [2024-03-11T15:57:54.207Z]: Initializing settings controller
+INFO [2024-03-11T15:57:54.208Z]: Creating navigation controller
+INFO [2024-03-11T15:57:54.208Z]: Initializing navigation controller
+INFO [2024-03-11T15:57:54.208Z]: Registering auth service with auth controller
+INFO [2024-03-11T15:57:54.208Z]: Calculating navigation
+INFO [2024-03-11T15:57:54.214Z]: Navigation
+INFO [2024-03-11T15:57:54.214Z]: {"page":"/auth/login"}
+INFO [2024-03-11T15:57:54.214Z]: Fully initialized!
+INFO [2024-03-11T15:57:54.217Z]: extension_initialized
+INFO [2024-03-11T15:57:54.217Z]: {"timeToInit":12184}
+INFO [2024-03-11T15:59:53.831Z]: register
+INFO [2024-03-11T15:59:53.831Z]: {}
+INFO [2024-03-11T15:59:53.838Z]: Set User: Ao23CZy3w9gxeiaQ2ps5a3QemOD3
+INFO [2024-03-11T15:59:53.851Z]: Navigation
+INFO [2024-03-11T15:59:53.851Z]: {"page":"/auth/verify"}
+INFO [2024-03-11T15:59:55.025Z]: Network Error: /plan/current
+INFO [2024-03-11T15:59:55.025Z]: {"url":"/plan/current","attempts":1}
+ERROR [2024-03-11T15:59:55.029Z]: {"statusCode":401,"timestamp":"2024-03-11T15:59:54.875Z","path":"/api/v1/plan/current","message":"Email not verified!"}
+ERROR [2024-03-11T15:59:56.047Z]: {"statusCode":401,"timestamp":"2024-03-11T15:59:54.875Z","path":"<REDACTED: user-file-path>","message":"Email not verified!"}
+ERROR [2024-03-11T15:59:56.048Z]: {"statusCode":401,"timestamp":"2024-03-11T15:59:54.875Z","path":"<REDACTED: user-file-path>","message":"Email not verified!"}
+INFO [2024-03-11T16:03:03.488Z]: Navigation
+INFO [2024-03-11T16:03:03.488Z]: {"page":"/initialize/project"}
+INFO [2024-03-11T16:03:03.503Z]: Reading ALL files
