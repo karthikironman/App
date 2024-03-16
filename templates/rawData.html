@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAW Data Display</title>
+    <title>Raw Data</title>
     <style>
         /* Add your CSS styles here */
         /* Example: */
@@ -28,8 +28,24 @@
     </style>
 </head>
 <body>
-    <h1>Data Display</h1>
-    <!-- Display the HTML table generated from DataFrame -->
-    {{ table_html|safe }}
+    <h1>Raw Data</h1>
+    <table>
+        <thead>
+            <tr>
+                {% for column in header %}
+                <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
