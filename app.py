@@ -19,19 +19,6 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-
-# @app.route('/raw_data')
-# def display_data():
-#     # Read the CSV file
-#     csv_path = 'code/fake_reviews_dataset.csv'
-#     df = pd.read_csv(csv_path)
-
-#     # Convert DataFrame to HTML table
-#     table_html = df.to_html(classes='table')
-
-#     return render_template('rawData.html', table_html=table_html)
-
-
 @app.route('/raw_data')
 def display_data():
     # Read the CSV file using the csv module
@@ -42,6 +29,27 @@ def display_data():
         data = list(reader)    # Read the remaining rows as data
         print(data)
     return render_template('rawData.html', header=header, data=data)
+
+@app.route('/processed_data')
+def processed_data():
+    # Read the CSV file using the csv module
+    csv_path = 'code/preprocessed_reviews_dataset.csv'
+    with open(csv_path, 'r', newline='', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        header = next(reader)  # Read the header row
+        data = list(reader)    # Read the remaining rows as data
+        print(data)
+    return render_template('processedData.html', header=header, data=data)
+
+
+@app.route('/code')
+def rawDataCode():
+    return render_template('codeExplain.html')
+
+@app.route('/data_training')
+def dataTraining():
+    return render_template('dataTraining.html')
+
 
 @app.route('/output')
 def output():

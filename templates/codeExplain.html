@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Analysis: Fake Reviews Detection</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+}
+h1, h2, h3 {
+    color: #333;
+}
+code {
+    background-color: #f5f5f5;
+    padding: 5px;
+}
+</style>
+</head>
+<body>
+
+  <form action="/"> <button type="submit">back </button> </form>
+<h1>Code Analysis: Fake Reviews Detection</h1>
+
+<!-- Step 1: Imports and Setup -->
+<h2>Step 1: Imports and Setup</h2>
+<code>
+import numpy as np<br>
+import pandas as pd<br>
+import seaborn as sns<br>
+import matplotlib.pyplot as plt<br>
+%matplotlib inline<br>
+import warnings<br>
+warnings.filterwarnings('ignore')<br>
+from nltk.corpus import stopwords<br>
+from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer<br>
+from sklearn.metrics import classification_report, confusion_matrix<br>
+from sklearn.model_selection import train_test_split<br>
+import string, nltk<br>
+from nltk import word_tokenize<br>
+from nltk.stem import PorterStemmer<br>
+from nltk.stem import WordNetLemmatizer<br>
+nltk.download('wordnet')<br>
+nltk.download('stopwords')<br>
+nltk.download('punkt')<br>
+nltk.download('omw-1.4')<br>
+</code>
+<p>This step involves importing necessary libraries and setting up configurations for later use. We import libraries like NumPy, pandas, seaborn, and matplotlib for data manipulation and visualization. We also download NLTK resources for text processing and suppress warnings for cleaner output.</p>
+
+<!-- Step 2: Data Loading and Initial Exploration -->
+<h2>Step 2: Data Loading and Initial Exploration</h2>
+<code>
+df = pd.read_csv('fake reviews dataset.csv')<br>
+df.head()<br>
+df.info()<br>
+df.describe()<br>
+df.isnull().sum()<br>
+df['rating'].value_counts()<br>
+</code>
+<p>In this step, we load the dataset 'fake reviews dataset.csv' into a pandas DataFrame and perform initial exploration. We display the first few rows of the DataFrame, retrieve information about the DataFrame, generate descriptive statistics, check for missing values, and examine the distribution of ratings.</p>
+
+<!-- Step 3: Text Cleaning Functions -->
+<h2>Step 3: Text Cleaning Functions</h2>
+<code>
+def clean_text(text):<br>
+    nopunc = [w for w in text if w not in string.punctuation]<br>
+    nopunc = ''.join(nopunc)<br>
+    return ' '.join([word for word in nopunc.split() if word.lower() not in stopwords.words('english')])<br><br>
+text_before_cleaning = df['text_'][0]<br>
+text_after_cleaning = clean_text(text_before_cleaning)<br><br>
+print("Original Text:")<br>
+print(text_before_cleaning)<br><br>
+print("\nText After Cleaning:")<br>
+print(text_after_cleaning)<br><br>
+df['text_'].head().apply(clean_text)<br>
+</code>
+<p>
+In this step, we define a function <code>clean_text()</code> to remove punctuation and stopwords from text data. We then apply this function to the 'text_' column of the DataFrame and store the cleaned text in a new column. Finally, we display the original text and the cleaned text for the first few rows of the DataFrame.
+</p>
+
+<!-- Step 4: Text Preprocessing -->
+<h2>Step 4: Text Preprocessing</h2>
+<code>
+def preprocess(text):<br>
+    return ' '.join([word for word in word_tokenize(text) if word not in stopwords.words('english') and not word.isdigit() and word not in string.punctuation])<br><br>
+preprocessed_text = preprocess(df['text_'][4])<br>
+print("Original Text:")<br>
+print(df['text_'][4])<br>
+print("\nPreprocessed Text:")<br>
+print(preprocessed_text)<br><br>
+df['text_'][:10000] = df['text_'][:10000].apply(preprocess)<br>
+df['text_'][10001:20000] = df['text_'][10001:20000].apply(preprocess)<br>
+df['text_'][20001:30000] = df['text_'][20001:30000].apply(preprocess)<br>
+df['text_'][30001:40000] = df['text_'][30001:40000].apply(preprocess)<br>
+df['text_'][40001:40432] = df['text_'][40001:40432].apply(preprocess)<br>
+</code>
+<p>
+In this step, we define a function <code>preprocess()</code> to tokenize, remove stopwords, digits, and punctuation from text data. We apply this function to preprocess the 'text_' column of the DataFrame in batches to avoid memory overflow. Finally, we display the original and preprocessed text for one example.
+</p>
+
+<!-- Step 5: Convert Text to Lowercase -->
+<h2>Step 5: Convert Text to Lowercase</h2>
+<code>
+df['text_'] = df['text_'].str.lower()<br>
+</code>
+<p>
+In this step, we convert all text in the 'text_' column to lowercase. This preprocessing step ensures that the text is standardized and makes it easier for subsequent processing steps such as tokenization and feature extraction.
+</p>
+
+<!-- Step 6: Stemming -->
+<h2>Step 6: Stemming</h2>
+<code>
+stemmer = PorterStemmer()<br>
+def stem_words(text):<br>
+    return ' '.join([stemmer.stem(word) for word in text.split()])<br>
+df['text_'] = df['text_'].apply(lambda x: stem_words(x))<br>
+</code>
+<p>
+In this step, we perform stemming on the text data using the Porter stemming algorithm. Stemming reduces words to their root or base form, which helps in standardizing the text and reducing the dimensionality of the feature space. We apply the stemming process to each word in the 'text_' column of the DataFrame.
+</p>
+
+<!-- Step 7: Lemmatization -->
+<h2>Step 7: Lemmatization</h2>
+<code>
+lemmatizer = WordNetLemmatizer()<br>
+def lemmatize_words(text):<br>
+    return ' '.join([lemmatizer.lemmatize(word) for word in text.split()])<br>
+df['text_'] = df['text_'].apply(lambda x: lemmatize_words(x))<br>
+</code>
+<p>
+In this step, we perform lemmatization on the text data using the WordNet lemmatizer. Lemmatization reduces words to their base or dictionary form, which helps in standardizing the text and improving the interpretability of the data. We apply the lemmatization process to each word in the 'text_' column of the DataFrame.
+</p>
+
+<!-- Step 8: Saving Preprocessed Data -->
+<h2>Step 8: Saving Preprocessed Data</h2>
+<code>
+df.to_csv('Preprocessed_Fake_Reviews_Detection_Dataset.csv')<br>
+</code>
+<p>
+In this step, we save the preprocessed DataFrame containing the cleaned, stemmed, and lemmatized text data to a CSV file named 'Preprocessed_Fake_Reviews_Detection_Dataset.csv'. This file can be used for further analysis or model training without the need to preprocess the data again.
+</p>
+
+<!-- Step 9: Importing Libraries -->
+<h2>Step 9: Importing Libraries</h2>
+<code>
+import numpy as np<br>
+import pandas as pd<br>
+import seaborn as sns<br>
+import matplotlib.pyplot as plt<br>
+%matplotlib inline<br>
+import warnings, string<br>
+warnings.filterwarnings('ignore')<br>
+from sklearn.model_selection import train_test_split, GridSearchCV<br>
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score<br>
+import nltk<br>
+from nltk.corpus import stopwords<br>
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer<br>
+from sklearn.naive_bayes import MultinomialNB<br>
+from sklearn.pipeline import Pipeline<br>
+from sklearn.ensemble import RandomForestClassifier<br>
+from sklearn.tree import DecisionTreeClassifier<br>
+from sklearn.neighbors import KNeighborsClassifier<br>
+from sklearn.svm import SVC<br>
+from sklearn.linear_model import LogisticRegression<br>
+</code>
+<p>
+In this step, we import the necessary libraries and modules for data processing, visualization, and machine learning tasks. These libraries include NumPy, Pandas, Seaborn, Matplotlib, Scikit-learn (sklearn), and NLTK (Natural Language Toolkit). We also set up the environment for inline plotting and suppress warnings for cleaner output.
+</p>
+
+<!-- Step 10: Loading Preprocessed Data -->
+<h2>Step 10: Loading Preprocessed Data</h2>
+<code>
+df = pd.read_csv('Preprocessed_Fake_Reviews_Detection_Dataset.csv')<br>
+df.head()<br>
+</code>
+<p>
+In this step, we load the preprocessed data from the CSV file 'Preprocessed_Fake_Reviews_Detection_Dataset.csv' into a Pandas DataFrame. We then display the first few rows of the DataFrame to ensure that the data has been loaded correctly.
+</p>
+
+<!-- Step 11: Data Cleaning -->
+<h2>Step 11: Data Cleaning</h2>
+<code>
+df.drop('Unnamed: 0', axis=1, inplace=True)<br>
+df.dropna(inplace=True)<br>
+</code>
+<p>
+In this step, we perform data cleaning operations to remove any unnecessary columns and rows with missing values from the DataFrame. We drop the column 'Unnamed: 0', which may have been created during the data preprocessing stage. We also remove any rows with missing values to ensure data integrity and consistency.
+</p>
+
+<!-- Step 12: Feature Engineering -->
+<h2>Step 12: Feature Engineering</h2>
+<code>
+df['length'] = df['text_'].apply(len)<br>
+</code>
+<p>
+In this step, we perform feature engineering by creating a new feature called 'length'. This feature represents the length of each review in terms of the number of characters. Adding this feature can provide additional information to the machine learning models and potentially improve their performance.
+</p>
+
+<!-- Step 13: Exploratory Data Analysis (EDA) -->
+<h2>Step 13: Exploratory Data Analysis (EDA)</h2>
+<code>
+df.info()<br>
+</code>
+<p>
+In this step, we perform exploratory data analysis (EDA) to gain insights into the dataset's structure, contents, and characteristics. We use the <code>info()</code> method to display a concise summary of the DataFrame, including the data types of each column and the number of non-null values. This helps us understand the dataset's size and composition.
+</p>
+
+<!-- Step 14: Data Visualization -->
+<h2>Step 14: Data Visualization</h2>
+<code>
+plt.hist(df['length'], bins=50)<br>
+plt.show()<br>
+</code>
+<p>
+In this step, we visualize the distribution of review lengths using a histogram. We use Matplotlib's <code>hist()</code> function to create the histogram, with the number of bins set to 50 for better granularity. This visualization helps us understand the range and distribution of review lengths in the dataset.
+</p>
+
+<!-- Step 15: Grouping and Descriptive Statistics -->
+<h2>Step 15: Grouping and Descriptive Statistics</h2>
+<code>
+df.groupby('label').describe()<br>
+</code>
+<p>
+In this step, we group the data by the 'label' column, which indicates whether a review is genuine or fake. We then compute descriptive statistics for each group, including count, mean, standard deviation, minimum, quartiles, and maximum. This helps us understand the distribution and characteristics of the data within each group.
+</p>
+
+<!-- Step 16: Visualizing Length Distribution by Label -->
+<h2>Step 16: Visualizing Length Distribution by Label</h2>
+<code>
+df.hist(column='length', by='label', bins=50, color='blue', figsize=(12,5))<br>
+plt.show()<br>
+</code>
+<p>
+In this step, we visualize the distribution of review lengths separately for genuine and fake reviews. We create separate histograms for each label category using Matplotlib's <code>hist()</code> function. This visualization helps us compare the length distributions between genuine and fake reviews.
+</p>
+
+<!-- Step 17: Examining Longest Review -->
+<h2>Step 17: Examining Longest Review</h2>
+<code>
+df[df['label']=='OR'][['text_', 'length']].sort_values(by='length', ascending=False).head().iloc[0].text_<br>
+</code>
+<p>
+In this step, we examine the longest review among genuine reviews. We filter the DataFrame to select only genuine reviews, then sort them by length in descending order and display the text of the longest review. This allows us to inspect the content of the longest review in the dataset.
+</p>
+
+<!-- Step 18: Descriptive Statistics for Length -->
+<h2>Step 18: Descriptive Statistics for Length</h2>
+<code>
+df['length'].describe()<br>
+</code>
+<p>
+In this step, we compute descriptive statistics for the 'length' feature, which represents the length of reviews in terms of the number of characters. We use the <code>describe()</code> method to calculate statistics such as count, mean, standard deviation, minimum, quartiles, and maximum. This provides insights into the distribution and summary statistics of review lengths.
+</p>
+
+<!-- Step 19: Text Processing -->
+<h2>Step 19: Text Processing</h2>
+<code>
+def text_process(review):<br>
+    nopunc = [char for char in review if char not in string.punctuation]<br>
+    nopunc = ''.join(nopunc)<br>
+    return [word for word in nopunc.split() if word.lower() not in stopwords.words('english')]<br>
+</code>
+<p>
+In this step, we define a text processing function that removes punctuation and stopwords from reviews. The function takes a review as input, removes punctuation characters, and filters out stopwords using NLTK's English stopwords list. This preprocessing step helps clean and normalize the text data for further analysis.
+</p>
+
+<!-- Step 20: Bag of Words Transformation -->
+<h2>Step 20: Bag of Words Transformation</h2>
+<code>
+bow_transformer = CountVectorizer(analyzer=text_process)<br>
+bow_transformer.fit(df['text_'])<br>
+print("Total Vocabulary:", len(bow_transformer.vocabulary_))<br>
+</code>
+<p>
+In this step, we perform a bag of words transformation on the text data. We initialize a CountVectorizer object with our custom text processing function and fit it to the 'text_' column of the DataFrame. This converts the text data into a matrix representation where each row corresponds to a review, and each column represents a unique word in the vocabulary. We print the total vocabulary size to verify the number of unique words.
+</p>
+
+<!-- Step 21: Train-Test Split -->
+<h2>Step 21: Train-Test Split</h2>
+<code>
+review_train, review_test, label_train, label_test = train_test_split(df['text_'], df['label'], test_size=0.35)<br>
+</code>
+<p>
+In this step, we split the preprocessed data into training and testing sets for model evaluation. We use the <code>train_test_split</code> function from scikit-learn to randomly divide the data into training and testing sets. We allocate 65% of the data to the training set and 35% to the testing set, ensuring a sufficient amount of data for training and evaluation.
+</p>
+
+<!-- Step 22: Model Pipeline Definition -->
+<h2>Step 22: Model Pipeline Definition</h2>
+<code>
+pipeline = Pipeline([
+    ('bow', CountVectorizer(analyzer=text_process)),
+    ('tfidf', TfidfTransformer()),
+    ('classifier', MultinomialNB())
+])<br>
+</code>
+<p>
+In this step, we define a model pipeline that encapsulates the data preprocessing steps and the classification model. We use scikit-learn's <code>Pipeline</code> class to chain together three components: CountVectorizer for feature extraction, TfidfTransformer for TF-IDF transformation, and Multinomial Naive Bayes classifier. This pipeline streamlines the process of fitting the model and making predictions.
+</p>
+
+<!-- Step 23: Model Training -->
+<h2>Step 23: Model Training</h2>
+<code>
+pipeline.fit(review_train, label_train)<br>
+</code>
+<p>
+In this step, we train the classification model using the training data. We call the <code>fit</code> method on the pipeline object, passing the training reviews and their corresponding labels as input. This process trains the model by extracting features from the text data, transforming them using TF-IDF, and fitting them to the Multinomial Naive Bayes classifier.
+</p>
+
+<!-- Step 24: Model Prediction -->
+<h2>Step 24: Model Prediction</h2>
+<code>
+predictions = pipeline.predict(review_test)<br>
+</code>
+<p>
+In this step, we use the trained model to make predictions on the testing data. We call the <code>predict</code> method on the pipeline object, passing the testing reviews as input. The model predicts the labels (genuine or fake) for the testing reviews based on their text features. These predictions will be evaluated against the true labels to assess the model's performance.
+</p>
+
+<!-- Step 25: Model Evaluation -->
+<h2>Step 25: Model Evaluation</h2>
+<code>
+print('Classification Report:', classification_report(label_test, predictions))<br>
+print('Confusion Matrix:', confusion_matrix(label_test, predictions))<br>
+print('Accuracy Score:', accuracy_score(label_test, predictions))<br>
+</code>
+<p>
+In this step, we evaluate the performance of the classification model on the testing data. We compute various evaluation metrics including precision, recall, F1-score, and accuracy. The <code>classification_report</code> function provides a detailed summary of these metrics for each class (genuine and fake). Additionally, we calculate the confusion matrix and overall accuracy score to assess the model's effectiveness in distinguishing between genuine and fake reviews.
+</p>
+
+<!-- Step 26: Model Prediction Accuracy -->
+<h2>Step 26: Model Prediction Accuracy</h2>
+<code>
+print('Model Prediction Accuracy:', str(np.round(accuracy_score(label_test, predictions) * 100, 2)) + '%')<br>
+</code>
+<p>
+In this step, we compute the overall accuracy of the classification model. We calculate the percentage of correctly predicted labels (both genuine and fake) out of all the testing samples. This accuracy score provides a single metric to measure the overall performance of the model in predicting the authenticity of reviews.
+</p>
+
+<!-- Step 27: Model Selection -->
+<h2>Step 27: Model Selection</h2>
+<code>
+print('Performance of Various ML Models:')<br>
+print('\n')<br>
+print('Logistic Regression Prediction Accuracy:', str(np.round(accuracy_score(label_test, lr_pred) * 100, 2)) + '%')<br>
+print('K Nearest Neighbors Prediction Accuracy:', str(np.round(accuracy_score(label_test, knn_pred) * 100, 2)) + '%')<br>
+print('Decision Tree Classifier Prediction Accuracy:', str(np.round(accuracy_score(label_test, dtree_pred) * 100, 2)) + '%')<br>
+print('Random Forests Classifier Prediction Accuracy:', str(np.round(accuracy_score(label_test, rfc_pred) * 100, 2)) + '%')<br>
+print('Support Vector Machines Prediction Accuracy:', str(np.round(accuracy_score(label_test, svc_pred) * 100, 2)) + '%')<br>
+print('Multinomial Naive Bayes Prediction Accuracy:', str(np.round(accuracy_score(label_test, predictions) * 100, 2)) + '%')<br>
+</code>
+<p>
+In this step, we compare the performance of various machine learning models. We print the prediction accuracy for each model on the testing data. By examining the accuracy scores of different models, we can determine which classifier performs best for the task of detecting fake reviews.
+</p>
+
+
+</body>
+</html>
